@@ -1,0 +1,1244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>UtterVR.com | When virtual worlds begin to speak</title>
+<meta name="description" content="UtterVR.com names the conversational presence layer of virtual worlds: voice, agents, spatial AI, avatars and responsive environments.">
+<link rel="canonical" href="https://uttervr.com/">
+<meta name="theme-color" content="#0D1124">
+<meta name="color-scheme" content="dark">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="UtterVR.com | When virtual worlds begin to speak">
+<meta property="og:description" content="A category-scale identity for conversational presence in spatial environments.">
+<meta property="og:url" content="https://uttervr.com/">
+<meta name="twitter:card" content="summary">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230D1124'/><circle cx='16' cy='16' r='3.6' fill='%23F2C57C'/><circle cx='16' cy='16' r='8.5' fill='none' stroke='%23F2C57C' stroke-opacity='.45'/><circle cx='16' cy='16' r='13' fill='none' stroke='%23F2C57C' stroke-opacity='.18'/></svg>">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "UtterVR.com",
+  "url": "https://uttervr.com/",
+  "description": "A strategic digital asset naming the conversational presence layer of virtual worlds.",
+  "about": [
+    "Virtual reality",
+    "Spatial computing",
+    "Conversational AI",
+    "Embodied agents",
+    "Virtual humans",
+    "Interactive environments"
+  ],
+  "publisher": {
+    "@type": "Organization",
+    "name": "Sohadot",
+    "url": "https://sohadot.com",
+    "email": "agent@sohadot.com"
+  }
+}
+</script>
+
+<style>
+:root{
+  --bg:#0D1124;
+  --bg-2:#11162C;
+  --bg-3:#151B35;
+  --paper:#F2F0F7;
+  --muted:#949CBD;
+  --muted-2:#677094;
+  --line:#2C365F;
+  --line-soft:#20294D;
+  --voice:#F2C57C;
+  --voice-soft:#F7DCA7;
+  --signal:#A7C7FF;
+  --ok:#B7D7C4;
+  --serif: "Iowan Old Style","Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;
+  --sans: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  --mono: "SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+  --gutter: clamp(1.2rem, 4.5vw, 4.4rem);
+  --measure: 40rem;
+  --ease: cubic-bezier(.22,.7,.2,1);
+}
+*{box-sizing:border-box}
+html{
+  background:var(--bg);
+  color:var(--paper);
+  scroll-behavior:smooth;
+  -webkit-text-size-adjust:100%;
+}
+body{
+  margin:0;
+  min-height:100%;
+  background:var(--bg);
+  color:var(--paper);
+  font-family:var(--sans);
+  font-size:1.02rem;
+  line-height:1.62;
+  overflow-x:hidden;
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+a{color:inherit}
+button,input,textarea{font:inherit}
+::selection{background:rgba(242,197,124,.22)}
+:focus-visible{outline:2px solid var(--voice);outline-offset:4px}
+
+#world{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:0;
+  pointer-events:none;
+}
+.world-vignette{
+  position:fixed;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 50% 55%, transparent 0 28%, rgba(13,17,36,.08) 44%, rgba(13,17,36,.58) 100%),
+    linear-gradient(to bottom, rgba(13,17,36,.1), rgba(13,17,36,.54));
+}
+.site-shell{
+  position:relative;
+  z-index:2;
+}
+.topbar{
+  position:fixed;
+  z-index:20;
+  top:0;
+  left:0;
+  right:0;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1rem;
+  padding:calc(env(safe-area-inset-top,0px) + .9rem) var(--gutter) .85rem;
+  background:linear-gradient(to bottom,rgba(13,17,36,.92),rgba(13,17,36,.28),transparent);
+  backdrop-filter:blur(8px);
+  pointer-events:none;
+}
+.brand{
+  font-size:.9rem;
+  font-weight:650;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.stage-readout{
+  display:flex;
+  align-items:center;
+  gap:.7rem;
+  font:600 .72rem/1 var(--mono);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+.stage-dot{
+  width:.5rem;
+  height:.5rem;
+  border-radius:50%;
+  background:var(--muted-2);
+  box-shadow:0 0 0 0 rgba(242,197,124,0);
+  transition:background .45s var(--ease), box-shadow .45s var(--ease);
+}
+.stage-dot.live{
+  background:var(--voice);
+  box-shadow:0 0 0 .35rem rgba(242,197,124,.08),0 0 1.4rem rgba(242,197,124,.35);
+}
+
+section{
+  position:relative;
+  min-height:100svh;
+  display:flex;
+  align-items:center;
+  padding:clamp(6rem,12vh,9rem) var(--gutter);
+}
+.section-inner{
+  width:min(100%,72rem);
+  margin:0 auto;
+}
+.copy{
+  max-width:var(--measure);
+}
+.eyebrow{
+  margin:0 0 1.25rem;
+  color:var(--muted);
+  font:600 .74rem/1.3 var(--mono);
+  letter-spacing:.09em;
+  text-transform:uppercase;
+}
+h1,h2,h3{
+  margin:0;
+  font-family:var(--serif);
+  font-weight:400;
+  text-wrap:balance;
+}
+h1{
+  max-width:12ch;
+  font-size:clamp(3rem,8.5vw,7.7rem);
+  line-height:.94;
+  letter-spacing:-.035em;
+}
+h2{
+  max-width:17ch;
+  font-size:clamp(2.45rem,6vw,5rem);
+  line-height:1;
+  letter-spacing:-.025em;
+}
+h3{
+  font-size:clamp(1.35rem,2.6vw,2rem);
+  line-height:1.15;
+}
+.lead{
+  max-width:36rem;
+  margin:1.7rem 0 0;
+  font-size:clamp(1.05rem,1.5vw,1.25rem);
+  color:#D9D7E5;
+}
+.muted{color:var(--muted)}
+.accent{color:var(--voice)}
+.mono{
+  font-family:var(--mono);
+  letter-spacing:.04em;
+}
+
+/* HERO */
+.hero{
+  min-height:100svh;
+  align-items:flex-end;
+  padding-bottom:clamp(3rem,9vh,6.5rem);
+}
+.hero .section-inner{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(16rem,25rem);
+  gap:clamp(2rem,7vw,7rem);
+  align-items:end;
+}
+.hero-copy{max-width:54rem}
+.hero-kicker{
+  margin:0 0 2rem;
+  font:600 .78rem/1 var(--mono);
+  color:var(--muted);
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.hero h1 .line{display:block}
+.hero h1 .ghost{
+  color:#9EA5C7;
+}
+.hero-sub{
+  margin:2rem 0 0;
+  max-width:34rem;
+  color:var(--muted);
+  font-size:1.04rem;
+}
+.hero-panel{
+  justify-self:end;
+  width:100%;
+  border:1px solid rgba(105,117,166,.3);
+  background:linear-gradient(180deg,rgba(16,21,43,.55),rgba(16,21,43,.24));
+  backdrop-filter:blur(12px);
+  padding:1rem;
+}
+.system-line{
+  display:flex;
+  justify-content:space-between;
+  gap:1rem;
+  padding:.65rem 0;
+  border-bottom:1px solid rgba(85,98,151,.2);
+  font:500 .72rem/1.4 var(--mono);
+  color:var(--muted);
+}
+.system-line:last-child{border-bottom:0}
+.system-line strong{
+  color:var(--paper);
+  font-weight:600;
+}
+.world-action{
+  margin-top:1.2rem;
+  width:100%;
+  border:1px solid rgba(242,197,124,.7);
+  background:rgba(242,197,124,.08);
+  color:var(--paper);
+  padding:.9rem 1rem;
+  cursor:pointer;
+  transition:background .25s ease,color .25s ease,transform .25s ease;
+}
+.world-action:hover{
+  background:var(--voice);
+  color:var(--bg);
+  transform:translateY(-1px);
+}
+.world-action:active{transform:none}
+
+/* semantic state rail */
+.state-rail{
+  margin-top:2rem;
+  display:flex;
+  flex-wrap:wrap;
+  gap:.55rem;
+}
+.state-pill{
+  border:1px solid rgba(85,98,151,.28);
+  padding:.45rem .65rem;
+  font:600 .7rem/1 var(--mono);
+  color:var(--muted);
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  background:rgba(13,17,36,.38);
+}
+.state-pill.active{
+  color:var(--voice);
+  border-color:rgba(242,197,124,.52);
+  background:rgba(242,197,124,.06);
+}
+
+/* TWO MEANINGS */
+.duality .section-inner{
+  display:grid;
+  grid-template-columns:1fr minmax(18rem,34rem) 1fr;
+  gap:clamp(1.5rem,4vw,4rem);
+  align-items:center;
+}
+.meaning{
+  min-height:22rem;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line-soft);
+  padding:2rem 0;
+}
+.meaning .word{
+  font-family:var(--serif);
+  font-size:clamp(3rem,7vw,6.4rem);
+  line-height:.9;
+  letter-spacing:-.04em;
+}
+.meaning .pos{
+  margin:.7rem 0 1rem;
+  font:500 .72rem/1 var(--mono);
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  color:var(--muted);
+}
+.meaning p:last-child{
+  margin:0;
+  max-width:20rem;
+  color:#D7D5E3;
+}
+.fusion{
+  aspect-ratio:1;
+  position:relative;
+  display:grid;
+  place-items:center;
+}
+.fusion-core{
+  position:relative;
+  z-index:2;
+  width:58%;
+  aspect-ratio:1;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(242,197,124,.5);
+  background:radial-gradient(circle,rgba(242,197,124,.10),rgba(242,197,124,.025) 50%,transparent 72%);
+  box-shadow:0 0 4rem rgba(242,197,124,.08);
+}
+.fusion-core span{
+  font-family:var(--serif);
+  font-size:clamp(1.8rem,4vw,3.6rem);
+}
+.fusion-ring{
+  position:absolute;
+  inset:8%;
+  border:1px solid rgba(128,145,206,.18);
+  border-radius:50%;
+}
+.fusion-ring.r2{inset:1%;border-color:rgba(128,145,206,.09)}
+.fusion-axis{
+  position:absolute;
+  inset:50% 0 auto;
+  height:1px;
+  background:linear-gradient(to right,transparent,var(--line),var(--voice),var(--line),transparent);
+}
+
+/* TRANSFORMATION */
+.transform .section-inner{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(18rem,31rem);
+  gap:clamp(3rem,8vw,8rem);
+  align-items:center;
+}
+.sequence{
+  list-style:none;
+  padding:0;
+  margin:2.5rem 0 0;
+  counter-reset:seq;
+}
+.sequence li{
+  counter-increment:seq;
+  display:grid;
+  grid-template-columns:3rem 1fr;
+  gap:1rem;
+  align-items:start;
+  padding:1rem 0;
+  border-top:1px solid rgba(74,88,139,.25);
+}
+.sequence li::before{
+  content:"0" counter(seq);
+  font:600 .72rem/1.5 var(--mono);
+  color:var(--muted);
+}
+.sequence strong{
+  display:block;
+  font-size:1rem;
+  letter-spacing:.01em;
+}
+.sequence span{
+  display:block;
+  margin-top:.25rem;
+  color:var(--muted);
+  font-size:.94rem;
+}
+.signal-stack{
+  position:relative;
+  min-height:30rem;
+  border:1px solid rgba(70,84,134,.27);
+  background:linear-gradient(180deg,rgba(16,21,43,.46),rgba(16,21,43,.16));
+  overflow:hidden;
+}
+.signal-stack::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(rgba(105,122,186,.08) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(105,122,186,.08) 1px,transparent 1px);
+  background-size:32px 32px;
+  mask-image:linear-gradient(to bottom,transparent,#000 15%,#000 85%,transparent);
+}
+.signal-node{
+  position:absolute;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--muted-2);
+  box-shadow:0 0 0 0 rgba(242,197,124,0);
+  transition:all .8s var(--ease);
+}
+.signal-node.live{
+  background:var(--voice);
+  box-shadow:0 0 0 6px rgba(242,197,124,.06),0 0 2rem rgba(242,197,124,.25);
+}
+.signal-line{
+  position:absolute;
+  height:1px;
+  transform-origin:left center;
+  background:linear-gradient(to right,rgba(107,121,179,.18),rgba(242,197,124,.75));
+  opacity:.5;
+}
+
+/* TERRITORY MAP */
+.territory{
+  min-height:120svh;
+}
+.territory .section-inner{
+  display:grid;
+  grid-template-columns:minmax(0,.85fr) minmax(24rem,1.15fr);
+  gap:clamp(3rem,7vw,7rem);
+  align-items:center;
+}
+.map{
+  position:relative;
+  min-height:38rem;
+  border:1px solid rgba(71,85,137,.22);
+  background:radial-gradient(circle at 50% 50%,rgba(242,197,124,.08),transparent 36%),rgba(14,19,40,.24);
+  overflow:hidden;
+}
+.map::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 50% 50%,transparent 0 22%,rgba(74,88,139,.12) 22.2% 22.5%,transparent 22.8% 41%,rgba(74,88,139,.08) 41.2% 41.5%,transparent 41.8%),
+    linear-gradient(rgba(76,91,145,.07) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(76,91,145,.07) 1px,transparent 1px);
+  background-size:auto,48px 48px,48px 48px;
+}
+.map-core{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:9.5rem;
+  aspect-ratio:1;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  text-align:center;
+  z-index:3;
+  border:1px solid rgba(242,197,124,.7);
+  background:rgba(13,17,36,.9);
+  box-shadow:0 0 4rem rgba(242,197,124,.08);
+}
+.map-core strong{
+  font-family:var(--serif);
+  font-size:1.55rem;
+  font-weight:400;
+}
+.map-node{
+  position:absolute;
+  z-index:4;
+  transform:translate(-50%,-50%);
+  border:1px solid rgba(96,111,172,.35);
+  background:rgba(13,17,36,.86);
+  color:#CFD3E8;
+  padding:.55rem .7rem;
+  font:600 .7rem/1 var(--mono);
+  letter-spacing:.04em;
+  white-space:nowrap;
+  transition:border-color .25s ease,color .25s ease,background .25s ease,transform .25s ease;
+}
+.map-node:hover{
+  color:var(--paper);
+  border-color:rgba(242,197,124,.7);
+  background:rgba(242,197,124,.08);
+  transform:translate(-50%,-50%) scale(1.04);
+}
+.map svg{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:2;
+  overflow:visible;
+}
+.map line{
+  stroke:rgba(124,139,195,.22);
+  stroke-width:1;
+}
+.map line.hot{
+  stroke:rgba(242,197,124,.55);
+}
+
+/* CATEGORY EVOLUTION */
+.evolution .section-inner{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(16rem,28rem);
+  gap:clamp(3rem,8vw,8rem);
+  align-items:center;
+}
+.evolution-track{
+  position:relative;
+  padding-left:2rem;
+}
+.evolution-track::before{
+  content:"";
+  position:absolute;
+  left:.4rem;
+  top:.5rem;
+  bottom:.5rem;
+  width:1px;
+  background:linear-gradient(to bottom,var(--line),var(--voice));
+}
+.e-step{
+  position:relative;
+  padding:1rem 0 1.2rem;
+}
+.e-step::before{
+  content:"";
+  position:absolute;
+  left:-1.82rem;
+  top:1.55rem;
+  width:.6rem;
+  height:.6rem;
+  border-radius:50%;
+  background:var(--line);
+}
+.e-step:last-child::before{
+  background:var(--voice);
+  box-shadow:0 0 0 .35rem rgba(242,197,124,.08);
+}
+.e-step strong{
+  display:block;
+  font-family:var(--serif);
+  font-size:1.55rem;
+  font-weight:400;
+}
+.e-step span{
+  display:block;
+  margin-top:.2rem;
+  color:var(--muted);
+  font-size:.92rem;
+}
+
+/* CONVERSATIONAL PRESENCE */
+.presence .section-inner{
+  text-align:center;
+}
+.presence h2{
+  margin-inline:auto;
+  max-width:16ch;
+}
+.presence .lead{
+  margin-inline:auto;
+}
+.presence-states{
+  margin:3.2rem auto 0;
+  width:min(100%,56rem);
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  border:1px solid rgba(72,87,139,.25);
+}
+.presence-state{
+  min-height:10rem;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  text-align:left;
+  padding:1.2rem;
+  border-right:1px solid rgba(72,87,139,.22);
+}
+.presence-state:last-child{border-right:0}
+.presence-state .code{
+  font:600 .68rem/1 var(--mono);
+  color:var(--muted);
+  letter-spacing:.08em;
+}
+.presence-state strong{
+  margin-top:auto;
+  font-family:var(--serif);
+  font-size:1.45rem;
+  font-weight:400;
+}
+.presence-state.live{
+  background:linear-gradient(180deg,rgba(242,197,124,.02),rgba(242,197,124,.08));
+}
+.presence-state.live .code{color:var(--voice)}
+
+/* ACQUISITION */
+.acquire{
+  min-height:88svh;
+}
+.acquire-card{
+  width:min(100%,64rem);
+  margin:0 auto;
+  padding:clamp(2rem,6vw,5rem);
+  border:1px solid rgba(92,108,171,.28);
+  background:
+    linear-gradient(140deg,rgba(242,197,124,.055),transparent 42%),
+    rgba(12,16,34,.6);
+  backdrop-filter:blur(12px);
+}
+.acquire-title{
+  font-family:var(--serif);
+  font-size:clamp(3rem,7vw,6.5rem);
+  line-height:.94;
+  letter-spacing:-.035em;
+}
+.acquire-sub{
+  max-width:39rem;
+  margin:1.5rem 0 0;
+  color:#D5D8E6;
+  font-size:1.08rem;
+}
+.inquiry{
+  display:inline-flex;
+  align-items:center;
+  gap:.7rem;
+  margin-top:2rem;
+  padding:.9rem 1.1rem;
+  border:1px solid rgba(242,197,124,.7);
+  color:var(--paper);
+  text-decoration:none;
+  font-weight:650;
+  background:rgba(242,197,124,.05);
+  transition:background .25s ease,color .25s ease,transform .25s ease;
+}
+.inquiry:hover{
+  background:var(--voice);
+  color:var(--bg);
+  transform:translateY(-1px);
+}
+.inquiry .arrow{transition:transform .25s ease}
+.inquiry:hover .arrow{transform:translateX(.25rem)}
+
+footer{
+  position:relative;
+  z-index:2;
+  min-height:70svh;
+  display:flex;
+  align-items:flex-end;
+  padding:clamp(6rem,12vh,10rem) var(--gutter) calc(2.4rem + env(safe-area-inset-bottom,0px));
+}
+.footer-inner{
+  width:min(100%,72rem);
+  margin:0 auto;
+}
+.footer-thesis{
+  max-width:16ch;
+  margin:0;
+  font-family:var(--serif);
+  font-size:clamp(2.6rem,6.4vw,5.6rem);
+  line-height:.98;
+  letter-spacing:-.03em;
+}
+.footer-tag{
+  margin:1.8rem 0 0;
+  max-width:38rem;
+  color:var(--muted);
+}
+.footer-meta{
+  display:flex;
+  justify-content:space-between;
+  gap:1.5rem;
+  flex-wrap:wrap;
+  margin-top:5rem;
+  padding-top:1rem;
+  border-top:1px solid rgba(73,87,139,.22);
+  font-size:.8rem;
+  color:var(--muted-2);
+}
+
+/* reveal */
+.reveal{
+  opacity:.22;
+  transform:translateY(1.2rem);
+  transition:opacity .9s var(--ease),transform .9s var(--ease);
+}
+.reveal.in{
+  opacity:1;
+  transform:none;
+}
+
+/* responsive */
+@media (max-width:900px){
+  .hero .section-inner,
+  .transform .section-inner,
+  .territory .section-inner,
+  .evolution .section-inner{
+    grid-template-columns:1fr;
+  }
+  .hero-panel{justify-self:start;max-width:28rem}
+  .duality .section-inner{
+    grid-template-columns:1fr;
+  }
+  .meaning{min-height:auto}
+  .fusion{width:min(100%,24rem);margin:0 auto}
+  .map{min-height:32rem}
+}
+@media (max-width:680px){
+  .stage-readout{display:none}
+  section{padding-top:7rem;padding-bottom:7rem}
+  .presence-states{grid-template-columns:1fr}
+  .presence-state{border-right:0;border-bottom:1px solid rgba(72,87,139,.22)}
+  .presence-state:last-child{border-bottom:0}
+  .map{min-height:28rem}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+  }
+}
+</style>
+</head>
+
+<body>
+<canvas id="world" aria-hidden="true"></canvas>
+<div class="world-vignette" aria-hidden="true"></div>
+
+<div class="site-shell">
+  <div class="topbar">
+    <div class="brand">UtterVR.com</div>
+    <div class="stage-readout" aria-hidden="true">
+      <span class="stage-dot" id="stageDot"></span>
+      <span id="stageLabel">Rendered / Silent</span>
+    </div>
+  </div>
+
+  <main>
+
+    <section class="hero" data-stage="0" id="hero">
+      <div class="section-inner">
+        <div class="hero-copy reveal in">
+          <p class="hero-kicker">A strategic identity for conversational presence</p>
+          <h1>
+            <span class="line">Virtual worlds are visual.</span>
+            <span class="line ghost">Presence is not.</span>
+          </h1>
+          <p class="hero-sub">
+            A world can be rendered before it feels alive.
+            Presence begins when the environment can hear, understand, respond and act.
+          </p>
+        </div>
+
+        <aside class="hero-panel reveal in" aria-label="World state">
+          <div class="system-line"><span>WORLD_STATE</span><strong id="worldState">RENDERED</strong></div>
+          <div class="system-line"><span>VOICE_INPUT</span><strong id="voiceState">ABSENT</strong></div>
+          <div class="system-line"><span>AGENT_PRESENCE</span><strong id="agentState">DORMANT</strong></div>
+          <div class="system-line"><span>RESPONSE</span><strong id="responseState">NONE</strong></div>
+          <button class="world-action" id="addressWorld" type="button">Address the world</button>
+          <div class="state-rail" aria-hidden="true">
+            <span class="state-pill active" data-pill="0">Silent</span>
+            <span class="state-pill" data-pill="1">Heard</span>
+            <span class="state-pill" data-pill="2">Understood</span>
+            <span class="state-pill" data-pill="3">Responsive</span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="duality" data-stage="1">
+      <div class="section-inner">
+        <article class="meaning reveal">
+          <div class="word">utter</div>
+          <div class="pos">verb</div>
+          <p>To speak. To give voice. To make expression present in the world.</p>
+        </article>
+
+        <div class="fusion reveal" aria-hidden="true">
+          <div class="fusion-ring r2"></div>
+          <div class="fusion-ring"></div>
+          <div class="fusion-axis"></div>
+          <div class="fusion-core"><span>UtterVR</span></div>
+        </div>
+
+        <article class="meaning reveal">
+          <div class="word">utter</div>
+          <div class="pos">adjective</div>
+          <p>Complete. Absolute. A stronger state than appearance alone.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="transform" data-stage="2">
+      <div class="section-inner">
+        <div class="copy reveal">
+          <p class="eyebrow">The transition</p>
+          <h2>Seeing was the first layer.</h2>
+          <p class="lead">The next layer is not another display. It is a world that can participate.</p>
+
+          <ol class="sequence">
+            <li><div><strong>Speak</strong><span>Language enters the environment.</span></div></li>
+            <li><div><strong>Understand</strong><span>Meaning is resolved into context and intent.</span></div></li>
+            <li><div><strong>Respond</strong><span>Avatars, agents and systems answer in place.</span></div></li>
+            <li><div><strong>Act</strong><span>The environment changes because the conversation happened.</span></div></li>
+          </ol>
+        </div>
+
+        <div class="signal-stack reveal" aria-hidden="true">
+          <span class="signal-node" style="left:17%;top:71%"></span>
+          <span class="signal-node" style="left:34%;top:46%"></span>
+          <span class="signal-node" style="left:52%;top:60%"></span>
+          <span class="signal-node" style="left:70%;top:34%"></span>
+          <span class="signal-node" style="left:82%;top:57%"></span>
+
+          <span class="signal-line" style="left:17%;top:71%;width:34%;transform:rotate(-36deg)"></span>
+          <span class="signal-line" style="left:34%;top:46%;width:25%;transform:rotate(24deg)"></span>
+          <span class="signal-line" style="left:52%;top:60%;width:27%;transform:rotate(-37deg)"></span>
+          <span class="signal-line" style="left:70%;top:34%;width:24%;transform:rotate(46deg)"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="territory" data-stage="3">
+      <div class="section-inner">
+        <div class="copy reveal">
+          <p class="eyebrow">The territory</p>
+          <h2>The voice layer of spatial intelligence.</h2>
+          <p class="lead">
+            UtterVR is not a headset name and not a generic assistant name.
+            It sits where voice, agency and spatial interaction converge.
+          </p>
+          <p class="muted">
+            Different products can occupy different nodes. The identity remains coherent because the underlying territory is the same: conversational presence inside virtual space.
+          </p>
+        </div>
+
+        <div class="map reveal" id="territoryMap">
+          <svg viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">
+            <line x1="500" y1="500" x2="230" y2="220" />
+            <line x1="500" y1="500" x2="500" y2="140" class="hot"/>
+            <line x1="500" y1="500" x2="785" y2="245" />
+            <line x1="500" y1="500" x2="820" y2="570" class="hot"/>
+            <line x1="500" y1="500" x2="690" y2="820" />
+            <line x1="500" y1="500" x2="350" y2="845" />
+            <line x1="500" y1="500" x2="165" y2="620" />
+          </svg>
+
+          <div class="map-core"><strong>UtterVR</strong></div>
+
+          <div class="map-node" style="left:23%;top:22%">Avatars</div>
+          <div class="map-node" style="left:50%;top:14%">Spatial AI</div>
+          <div class="map-node" style="left:78.5%;top:24.5%">Embodied Agents</div>
+          <div class="map-node" style="left:82%;top:57%">Interactive Worlds</div>
+          <div class="map-node" style="left:69%;top:82%">Gaming</div>
+          <div class="map-node" style="left:35%;top:84.5%">Simulation</div>
+          <div class="map-node" style="left:16.5%;top:62%">Spatial Communication</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="evolution" data-stage="4">
+      <div class="section-inner">
+        <div class="copy reveal">
+          <p class="eyebrow">The semantic territory</p>
+          <h2>The medium evolves. The name does not need to shrink with it.</h2>
+          <p class="lead">
+            VR named the immersive medium. XR broadened it. Spatial computing normalized it. Agentic intelligence is making it responsive.
+          </p>
+          <p class="muted">
+            UtterVR can move with that trajectory because “utter” carries the durable idea: expression, language, presence and completeness.
+          </p>
+        </div>
+
+        <div class="evolution-track reveal">
+          <div class="e-step"><strong>VR</strong><span>Immersive visual space.</span></div>
+          <div class="e-step"><strong>XR</strong><span>Blended physical and virtual interaction.</span></div>
+          <div class="e-step"><strong>Spatial Computing</strong><span>Computing organized around place and presence.</span></div>
+          <div class="e-step"><strong>Embodied Intelligence</strong><span>Agents that can perceive, converse and act inside that space.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="presence" data-stage="5">
+      <div class="section-inner">
+        <p class="eyebrow reveal">The category shift</p>
+        <h2 class="reveal">Not voice control. Conversational presence.</h2>
+        <p class="lead reveal">
+          The interface stops behaving like a surface and becomes a participant.
+        </p>
+
+        <div class="presence-states reveal">
+          <div class="presence-state">
+            <span class="code">01 / INPUT</span>
+            <strong>You speak.</strong>
+          </div>
+          <div class="presence-state">
+            <span class="code">02 / INTENT</span>
+            <strong>The world understands.</strong>
+          </div>
+          <div class="presence-state live">
+            <span class="code">03 / STATE CHANGE</span>
+            <strong>The world responds.</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="acquire" data-stage="6" id="acquire">
+      <div class="acquire-card reveal">
+        <p class="eyebrow">Strategic digital asset</p>
+        <div class="acquire-title">UtterVR.com</div>
+        <p class="acquire-sub">
+          A category-scale identity for conversational presence in spatial environments —
+          spanning avatars, agents, voice infrastructure, simulation, immersive entertainment and spatial AI.
+        </p>
+        <a class="inquiry" href="mailto:agent@sohadot.com?subject=UtterVR.com%20Strategic%20Acquisition">
+          Strategic acquisition inquiry <span class="arrow">→</span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer data-stage="7">
+    <div class="footer-inner">
+      <p class="footer-thesis reveal">A world is not complete just because you can see it.</p>
+      <p class="footer-tag reveal"><strong>UtterVR.com</strong> — when virtual worlds begin to speak.</p>
+      <div class="footer-meta">
+        <span>Strategic digital asset · Sohadot</span>
+        <span>© 2026</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+(function(){
+  const canvas = document.getElementById('world');
+  const ctx = canvas.getContext('2d', { alpha:true });
+  const stageLabel = document.getElementById('stageLabel');
+  const stageDot = document.getElementById('stageDot');
+
+  const worldState = document.getElementById('worldState');
+  const voiceState = document.getElementById('voiceState');
+  const agentState = document.getElementById('agentState');
+  const responseState = document.getElementById('responseState');
+  const addressBtn = document.getElementById('addressWorld');
+  const pills = [...document.querySelectorAll('.state-pill')];
+  const signalNodes = [...document.querySelectorAll('.signal-node')];
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let W=0,H=0,DPR=1;
+  let stage=0;
+  let userAwakened=false;
+  let time=0;
+  let raf=0;
+  let pointer={x:.5,y:.5,active:false};
+  const ripples=[];
+
+  const STAGES = [
+    {label:'Rendered / Silent', energy:.05, nodes:0, links:0, hue:0},
+    {label:'Heard', energy:.22, nodes:2, links:1, hue:.12},
+    {label:'Understood', energy:.42, nodes:5, links:3, hue:.28},
+    {label:'Agent Presence', energy:.62, nodes:8, links:6, hue:.48},
+    {label:'Spatial Intelligence', energy:.76, nodes:10, links:8, hue:.66},
+    {label:'Conversational Presence', energy:.9, nodes:12, links:10, hue:.82},
+    {label:'Category Scale', energy:1, nodes:14, links:12, hue:1},
+    {label:'Complete / Utter', energy:.72, nodes:11, links:9, hue:.9}
+  ];
+
+  const nodeSeeds = [
+    [.16,.68],[.30,.50],[.46,.61],[.59,.43],[.72,.56],[.82,.38],[.39,.30],
+    [.65,.24],[.22,.35],[.78,.73],[.51,.19],[.33,.78],[.89,.58],[.10,.50]
+  ];
+
+  function resize(){
+    DPR=Math.min(devicePixelRatio||1,2);
+    W=canvas.clientWidth;
+    H=canvas.clientHeight;
+    canvas.width=Math.max(1,Math.floor(W*DPR));
+    canvas.height=Math.max(1,Math.floor(H*DPR));
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+
+  function addRipple(nx=.5,ny=.6,power=1){
+    ripples.push({x:nx*W,y:ny*H,t:performance.now()/1000,power});
+  }
+
+  function drawGrid(cfg,t){
+    const horizon=H*.54;
+    const centerX=W*.5;
+    const depth=18;
+    ctx.save();
+    ctx.lineWidth=1;
+
+    for(let i=-18;i<=18;i++){
+      const xTop=centerX+i*8;
+      const xBottom=centerX+i*(W/15);
+      const g=ctx.createLinearGradient(0,horizon,0,H);
+      g.addColorStop(0,'rgba(74,89,148,0.03)');
+      g.addColorStop(1,`rgba(90,108,176,${0.10+cfg.energy*0.09})`);
+      ctx.strokeStyle=g;
+      ctx.beginPath();
+      ctx.moveTo(xTop,horizon);
+      ctx.lineTo(xBottom,H);
+      ctx.stroke();
+    }
+
+    for(let j=0;j<depth;j++){
+      const p=j/(depth-1);
+      const y=horizon + Math.pow(p,1.85)*(H-horizon);
+      const a=.04 + p*(.13+cfg.energy*.08);
+      ctx.strokeStyle=`rgba(83,100,164,${a})`;
+      ctx.beginPath();
+      ctx.moveTo(0,y);
+      ctx.lineTo(W,y);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function drawRipples(cfg,t){
+    for(let i=ripples.length-1;i>=0;i--){
+      const r=ripples[i];
+      const age=t-r.t;
+      if(age>4.8){ ripples.splice(i,1); continue; }
+      const radius=age*Math.min(W,H)*.22;
+      const fade=Math.max(0,1-age/4.8)*r.power;
+      ctx.save();
+      ctx.strokeStyle=`rgba(242,197,124,${.48*fade})`;
+      ctx.lineWidth=1.2;
+      ctx.beginPath();
+      ctx.ellipse(r.x,r.y,radius,radius*.28,0,0,Math.PI*2);
+      ctx.stroke();
+
+      ctx.strokeStyle=`rgba(167,199,255,${.18*fade})`;
+      ctx.beginPath();
+      ctx.ellipse(r.x,r.y,radius*1.25,radius*.36,0,0,Math.PI*2);
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
+
+  function drawNodes(cfg,t){
+    const count=Math.min(nodeSeeds.length,cfg.nodes);
+    const pts=[];
+    for(let i=0;i<count;i++){
+      const s=nodeSeeds[i];
+      const drift=Math.sin(t*.45+i)*4*cfg.energy;
+      const x=s[0]*W+drift;
+      const y=s[1]*H+Math.cos(t*.37+i*.8)*3*cfg.energy;
+      pts.push([x,y]);
+    }
+
+    for(let i=0;i<Math.min(cfg.links,pts.length-1);i++){
+      const a=pts[i];
+      const b=pts[(i+2)%pts.length];
+      const grad=ctx.createLinearGradient(a[0],a[1],b[0],b[1]);
+      grad.addColorStop(0,'rgba(107,125,191,.08)');
+      grad.addColorStop(1,`rgba(242,197,124,${.14+cfg.energy*.25})`);
+      ctx.strokeStyle=grad;
+      ctx.lineWidth=1;
+      ctx.beginPath();
+      ctx.moveTo(a[0],a[1]);
+      ctx.lineTo(b[0],b[1]);
+      ctx.stroke();
+    }
+
+    pts.forEach((p,i)=>{
+      const hot=i===Math.max(0,count-1) || (stage>=5 && i%3===0);
+      const pulse=1+Math.sin(t*2+i)*.08;
+      ctx.save();
+      ctx.translate(p[0],p[1]);
+      ctx.scale(pulse,pulse);
+      ctx.fillStyle=hot ? 'rgba(242,197,124,.92)' : 'rgba(139,151,205,.58)';
+      ctx.beginPath();
+      ctx.arc(0,0,hot?3.2:2.3,0,Math.PI*2);
+      ctx.fill();
+      if(hot){
+        ctx.strokeStyle='rgba(242,197,124,.16)';
+        ctx.beginPath();
+        ctx.arc(0,0,8+Math.sin(t*1.8+i)*2,0,Math.PI*2);
+        ctx.stroke();
+      }
+      ctx.restore();
+    });
+  }
+
+  function drawField(cfg,t){
+    const grad=ctx.createRadialGradient(W*.5,H*.52,10,W*.5,H*.52,Math.max(W,H)*.72);
+    grad.addColorStop(0,`rgba(28,36,72,${.28+cfg.energy*.08})`);
+    grad.addColorStop(.45,`rgba(16,22,49,${.38+cfg.energy*.12})`);
+    grad.addColorStop(1,'rgba(13,17,36,.96)');
+    ctx.fillStyle=grad;
+    ctx.fillRect(0,0,W,H);
+
+    if(stage>=4){
+      const glow=ctx.createRadialGradient(W*.54,H*.46,0,W*.54,H*.46,Math.min(W,H)*.35);
+      glow.addColorStop(0,`rgba(167,199,255,${.02+cfg.energy*.035})`);
+      glow.addColorStop(1,'rgba(167,199,255,0)');
+      ctx.fillStyle=glow;
+      ctx.fillRect(0,0,W,H);
+    }
+  }
+
+  function frame(ts){
+    time=ts/1000;
+    const cfg=STAGES[stage]||STAGES[0];
+    ctx.clearRect(0,0,W,H);
+    drawField(cfg,time);
+    drawGrid(cfg,time);
+    if(userAwakened || stage>0) drawRipples(cfg,time);
+    drawNodes(cfg,time);
+
+    if(pointer.active && stage>=2){
+      ctx.save();
+      ctx.strokeStyle='rgba(242,197,124,.14)';
+      ctx.beginPath();
+      ctx.arc(pointer.x*W,pointer.y*H,20+Math.sin(time*2)*4,0,Math.PI*2);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    raf=requestAnimationFrame(frame);
+  }
+
+  function setStage(next){
+    next=Math.max(0,Math.min(STAGES.length-1,next));
+    if(next===stage) return;
+    stage=next;
+    const cfg=STAGES[stage];
+    stageLabel.textContent=cfg.label;
+    stageDot.classList.toggle('live',stage>0);
+
+    signalNodes.forEach((n,i)=>n.classList.toggle('live',i<Math.max(1,Math.min(signalNodes.length,stage))));
+
+    if(stage>0 && !reduce && ripples.length<2){
+      addRipple(.5,.6,Math.min(1,.35+stage*.1));
+    }
+
+    updateHeroSystem();
+  }
+
+  function updateHeroSystem(){
+    const s=Math.max(stage,userAwakened?1:0);
+    worldState.textContent = s===0 ? 'RENDERED' : s<3 ? 'LISTENING' : 'RESPONSIVE';
+    voiceState.textContent = s===0 ? 'ABSENT' : s<2 ? 'HEARD' : 'PRESENT';
+    agentState.textContent = s<3 ? 'DORMANT' : s<5 ? 'ACTIVE' : 'EMBODIED';
+    responseState.textContent = s<2 ? 'NONE' : s<4 ? 'CONTEXTUAL' : 'STATE CHANGE';
+
+    pills.forEach((p,i)=>{
+      const threshold=[0,1,2,4][i];
+      p.classList.toggle('active',s>=threshold);
+    });
+  }
+
+  addressBtn.addEventListener('click',()=>{
+    userAwakened=true;
+    addRipple(.5,.63,1);
+    updateHeroSystem();
+    stageDot.classList.add('live');
+    stageLabel.textContent='Heard';
+    addressBtn.textContent='The world heard you';
+    addressBtn.disabled=true;
+  });
+
+  window.addEventListener('pointermove',e=>{
+    pointer.x=e.clientX/Math.max(1,W);
+    pointer.y=e.clientY/Math.max(1,H);
+    pointer.active=true;
+  },{passive:true});
+
+  window.addEventListener('pointerleave',()=>pointer.active=false);
+
+  const observed=[...document.querySelectorAll('[data-stage]')];
+  const stageObserver=new IntersectionObserver((entries)=>{
+    const visible=entries
+      .filter(e=>e.isIntersecting)
+      .sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0];
+    if(visible){
+      setStage(Number(visible.target.dataset.stage||0));
+    }
+  },{threshold:[.18,.35,.55,.72]});
+
+  observed.forEach(el=>stageObserver.observe(el));
+
+  const revealObserver=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting) e.target.classList.add('in');
+    });
+  },{threshold:.16});
+
+  document.querySelectorAll('.reveal').forEach(el=>revealObserver.observe(el));
+
+  const territoryMap=document.getElementById('territoryMap');
+  territoryMap?.addEventListener('pointermove',e=>{
+    const r=territoryMap.getBoundingClientRect();
+    pointer.x=(r.left+r.width/2)/W;
+    pointer.y=(r.top+r.height/2)/H;
+  },{passive:true});
+
+  window.addEventListener('resize',resize,{passive:true});
+  resize();
+  updateHeroSystem();
+
+  if(reduce){
+    document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in'));
+  }
+
+  cancelAnimationFrame(raf);
+  raf=requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
